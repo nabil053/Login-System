@@ -20,16 +20,40 @@
 					<form class="" action="" method="post">
 						<div class="form-group" style="margin-bottom: 20px;">
 							<label for="UserEmail" style="margin-bottom: 10px;"><strong>Email:</strong></label>
-							<input class="form-control" type="email" id="UserEmail">
+							<input class="form-control" type="email" name="UserEmail" id="UserEmail" placeholder="Enter Email">
 						</div>
 
 						<div class="form-group" style="margin-bottom: 20px;">
 							<label for="UserPassword" style="margin-bottom: 10px;"><strong>Password:</strong></label>
-							<input class="form-control" type="password" id="UserPassword">
+							<input class="form-control" type="password" name="UserPassword" id="UserPassword" placeholder="Enter Password">
 						</div>
 
-						<button type="submit" id="SubmitButton" class="btn btn-primary" style="margin-bottom: 20px;">Login</button>
+						<input type="submit" id="Login" name="Login" value="Login" class="btn btn-primary" style="margin-bottom: 20px;">
 					</form>
+
+					<?php
+						$con = mysqli_connect("localhost","root","","login_database");
+						if (mysqli_connect_errno()) {
+							echo "Failed to connect to MYSQL: ".mysqli_connect_error();
+						}
+						else{
+							if(isset($_POST['Login'])){
+								$email = $_POST['UserEmail'];
+								$password = $_POST['UserPassword'];
+
+								$user_query = $con->query("SELECT * FROM users WHERE email = '$email' AND password = '$password'");
+								$is_authentic = mysqli_num_rows($user_query);
+
+								if($is_authentic == 0){
+									header("Location: error.php");
+								}
+								else{
+									header("Location: success.php");
+								}
+								exit();
+							}
+						}
+					?>
 				</div>
 
 				<div class="col-md-3 col-sm-2"></div>
